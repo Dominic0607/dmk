@@ -107,3 +107,4 @@ body {
 #reader__dashboard_section_csr button { background-color: #4b5563; color: white; padding: 5px 10px; border-radius: 5px; }
 .image-preview-modal { transition: opacity 0.3s ease-in-out; }
 .image-preview-modal img { transition: transform 0.3s ease-in-out; max-width: 90vw; max-height: 90vh; }
+
