@@ -6,42 +6,119 @@
     <title>កម្មវិធីទម្លាក់ការកម្មង់</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <!-- CSP added for safety when loading inline content (required for external hosting) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://script.google.com https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com https://placehold.co https://lh3.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://unpkg.com; img-src 'self' data: https://script.google.com https://placehold.co https://lh3.googleusercontent.com;">
     <style>
-        body { font-family: 'Kantumruy Pro', sans-serif; background-color: #111827; }
-        .flare-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: radial-gradient(circle at var(--x) var(--y), rgba(59, 130, 246, 0.15), transparent 40%); z-index: -1; transition: background 0.1s ease-out; }
-        #main-container { padding-top: 80px; padding-bottom: 2rem; }
-        .form-input, .form-select { background-color: #1f2937; border: 1px solid #374151; color: #d1d5db; border-radius: 0.5rem; padding: 0.75rem 1rem; transition: border-color 0.2s, box-shadow 0.2s; font-size: 1rem; }
-        .form-input:focus, .form-select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); }
-        .btn { border-radius: 0.5rem; padding: 0.75rem 1.5rem; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; text-align: center; }
-        .btn-primary { background-color: #2563eb; color: white; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
-        .btn-primary:hover { background-color: #1d4ed8; transform: translateY(-2px); box-shadow: 0 6px 10px rgba(37, 99, 235, 0.3); }
-        .btn-primary:disabled { background-color: #1f2937; color: #4b5563; cursor: not-allowed; transform: none; box-shadow: none; }
-        .btn-secondary { background-color: #4b5563; color: white; }
-        .btn-secondary:hover { background-color: #374151; }
-        .btn-danger { background-color: #dc2626; color: white; } .btn-danger:hover { background-color: #b91c1c; }
-        .page-card { background-color: rgba(31, 41, 55, 0.8); backdrop-filter: blur(10px); border: 1px solid #374151; border-radius: 1rem; padding: 1rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
-        @media (min-width: 640px) { .page-card { padding: 2rem; } }
-        .selection-button { background-color: #1f2937; border: 1px solid #374151; color: #d1d5db; border-radius: 0.75rem; padding: 1.5rem; text-align: center; font-size: 1.125rem; font-weight: 600; transition: all 0.2s; cursor: pointer; }
-        .selection-button:hover { background-color: #3b82f6; color: white; border-color: #3b82f6; transform: scale(1.05); }
-        #loading-spinner, .status-spinner, #data-loader-spinner, #login-spinner { border-color: #3b82f6; border-top-color: transparent; }
-        .step-circle, .step-label, .step-connector { transition: all 0.3s ease-in-out; }
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background-color: #111827;
+        }
+        .flare-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at var(--x) var(--y), rgba(59, 130, 246, 0.15), transparent 40%);
+            z-index: -1;
+            transition: background 0.1s ease-out;
+        }
+        #main-container {
+            padding-top: 80px; /* Space for the new header */
+            padding-bottom: 2rem;
+        }
+        .form-input, .form-select {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            color: #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+        .btn {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(37, 99, 235, 0.3);
+        }
+        .btn-primary:disabled {
+            background-color: #1f2937;
+            color: #4b5563;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .btn-secondary {
+            background-color: #4b5563;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #374151;
+        }
+        .page-card {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #374151;
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        @media (min-width: 640px) {
+            .page-card {
+                padding: 2rem;
+            }
+        }
+        .selection-button {
+             background-color: #1f2937;
+             border: 1px solid #374151;
+             color: #d1d5db;
+             border-radius: 0.75rem;
+             padding: 1.5rem;
+             text-align: center;
+             font-size: 1.125rem;
+             font-weight: 600;
+             transition: all 0.2s;
+             cursor: pointer;
+        }
+        .selection-button:hover {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            transform: scale(1.05);
+        }
+        #loading-spinner, .status-spinner, #data-loader-spinner, #login-spinner {
+            border-color: #3b82f6;
+            border-top-color: transparent;
+        }
+        .step-circle, .step-label, .step-connector {
+            transition: all 0.3s ease-in-out;
+        }
+        #reader__dashboard_section_csr { display: flex; flex-direction: column; align-items: center; }
+        #reader__dashboard_section_csr span { margin-bottom: 10px; }
+        #reader__dashboard_section_csr button { background-color: #4b5563; color: white; padding: 5px 10px; border-radius: 5px; }
         .image-preview-modal { transition: opacity 0.3s ease-in-out; }
         .image-preview-modal img { transition: transform 0.3s ease-in-out; max-width: 90vw; max-height: 90vh; }
-        /* Admin Panel Styles */
-        .sidebar-link { display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 0.5rem; transition: all 0.2s; color: #d1d5db; }
-        .sidebar-link:hover, .sidebar-link.active { background-color: #374151; color: #ffffff; }
-        .sidebar-link svg { margin-right: 0.75rem; }
-        .table-cell, .table-header { padding: 0.75rem 1rem; border-bottom: 1px solid #374151; }
-        .table-cell[contenteditable]:focus { outline: 2px solid #3b82f6; background-color: #111827; }
-        .config-tab-btn { padding: 0.5rem 1rem; border-bottom: 2px solid transparent; transition: all 0.2s; }
-        .config-tab-btn.active { color: #3b82f6; border-color: #3b82f6; font-weight: 600; }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 min-h-screen flex items-center justify-center p-2 sm:p-4">
@@ -88,8 +165,8 @@
                         <div class="relative">
                             <input type="password" id="password" placeholder="ពាក្យសម្ងាត់" class="form-input w-full text-center pr-10" required>
                             <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-white">
-                                <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                <svg id="eye-closed" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7-9.542 7 .847 0 1.67 .126 2.454 .364m-3.033 2.446a3 3 0 11-4.243 4.243m4.242-4.242l4.243 4.243M3 3l18 18" /></svg>
+                                <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                <svg id="eye-closed" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 .847 0 1.67.126 2.454.364m-3.033 2.446a3 3 0 11-4.243 4.243m4.242-4.242l4.243 4.243M3 3l18 18" /></svg>
                             </button>
                         </div>
                     </div>
@@ -113,213 +190,10 @@
 
         <!-- Main App Container (for Regular User and Admin Panel) -->
         <div id="app-container" class="hidden w-full">
-            <!-- Admin Panel Container (Merged from admin.html) -->
-            <div id="admin-panel-ui" class="hidden flex h-screen">
-                <!-- Sidebar -->
-                <aside class="w-64 bg-gray-800 p-4 flex flex-col border-r border-gray-700 flex-shrink-0">
-                    <div class="flex items-center mb-8"><div class="p-2 bg-blue-600 rounded-lg mr-3"><svg class="w-6 h-6 text-white" data-lucide="shield-check"></svg></div><h1 class="text-xl font-bold text-white">Admin Panel</h1></div>
-                    <nav class="flex flex-col space-y-2">
-                        <a href="#" id="nav-dashboard" class="sidebar-link active"><svg class="w-5 h-5" data-lucide="layout-dashboard"></svg><span>ផ្ទាំងគ្រប់គ្រង</span></a>
-                        <a href="#" id="nav-users" class="sidebar-link"><svg class="w-5 h-5" data-lucide="users"></svg><span>គ្រប់គ្រង User</span></a>
-                        <a href="#" id="nav-config" class="sidebar-link"><svg class="w-5 h-5" data-lucide="sliders-horizontal"></svg><span>ការកំណត់ប្រព័ន្ធ</span></a>
-                        <a href="#" id="nav-reports" class="sidebar-link"><svg class="w-5 h-5" data-lucide="file-bar-chart-2"></svg><span>របាយការណ៍</span></a>
-                    </nav>
-                </aside>
-
-                <!-- Main Content -->
-                <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-                    <!-- Dashboard Page -->
-                    <div id="page-dashboard">
-                        <h2 class="text-3xl font-bold text-white mb-6">ផ្ទាំងគ្រប់គ្រង</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-gray-800 p-6 rounded-lg border border-gray-700"><h3 class="text-sm font-medium">Total Users</h3><p id="stat-total-users" class="text-3xl font-bold mt-2 text-white">0</p></div>
-                            <div class="bg-gray-800 p-6 rounded-lg border border-gray-700"><h3 class="text-sm font-medium">Total Products</h3><p id="stat-total-products" class="text-3xl font-bold mt-2 text-white">0</p></div>
-                            <div class="bg-gray-800 p-6 rounded-lg border border-gray-700"><h3 class="text-sm font-medium">Bank Accounts</h3><p id="stat-total-banks" class="text-3xl font-bold mt-2 text-white">0</p></div>
-                            <div class="bg-gray-800 p-6 rounded-lg border border-gray-700"><h3 class="text-sm font-medium">Drivers</h3><p id="stat-total-drivers" class="text-3xl font-bold mt-2 text-white">0</p></div>
-                        </div>
-                        <div class="mt-8 bg-gray-800 p-6 rounded-lg border border-gray-700">
-                            <h3 class="text-lg font-bold text-white mb-4">ទិដ្ឋភាពទូទៅនៃទិន្នន័យ</h3>
-                            <canvas id="overview-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- User Management Page -->
-                    <div id="page-users" class="hidden">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-3xl font-bold text-white">គ្រប់គ្រង User</h2>
-                            <button id="add-user-btn" class="btn btn-primary flex items-center"><svg class="w-5 h-5 mr-2" data-lucide="plus"></svg>Add User</button>
-                        </div>
-                        <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-700/50 text-xs uppercase">
-                                    <tr>
-                                        <th class="table-header">Username</th><th class="table-header">Full Name</th><th class="table-header">Team</th><th class="table-header">Role</th><th class="table-header">Admin</th><th class="table-header">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="users-table-body"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- System Configuration Page -->
-                    <div id="page-config" class="hidden">
-                        <h2 class="text-3xl font-bold text-white mb-6">ការកំណត់ប្រព័ន្ធ</h2>
-                        <div class="flex space-x-4 border-b border-gray-700 mb-6 overflow-x-auto pb-2">
-                            <button class="config-tab-btn active" data-sheet="products">Products</button>
-                            <button class="config-tab-btn" data-sheet="bankAccounts">Bank Accounts</button>
-                            <button class="config-tab-btn" data-sheet="drivers">Drivers</button>
-                            <button class="config-tab-btn" data-sheet="shippingMethods">Shipping Methods</button>
-                            <button class="config-tab-btn" data-sheet="teamsPages">Teams/Pages</button>
-                            <button class="config-tab-btn" data-sheet="telegramTemplates">Telegram Templates</button>
-                        </div>
-                        <div id="config-content">
-                            <div class="flex justify-end mb-4 space-x-2">
-                                <button id="add-config-row-btn" class="btn btn-secondary text-sm">Add Row</button>
-                                <button id="save-config-btn" class="btn btn-primary text-sm">Save Changes</button>
-                            </div>
-                            <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-x-auto">
-                                <table class="w-full text-left" id="config-table"></table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Reports Page -->
-                    <div id="page-reports" class="hidden">
-                        <h2 class="text-3xl font-bold text-white mb-6">របាយការណ៍</h2>
-                        <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                            <p>ផ្នែកសម្រាប់របាយការណ៍កម្រិតខ្ពស់នាពេលអនាគត។</p>
-                        </div>
-                    </div>
-                </main>
-            </div>
-            <!-- End Admin Panel UI -->
-
-            <!-- Regular User App UI (hidden while admin panel is shown) -->
-            <div id="regular-app-ui" class="hidden w-full max-w-4xl mx-auto">
-                <!-- Progress Indicator -->
-                <div id="progress-indicator" class="hidden w-full max-w-3xl mx-auto mb-4 sm:mb-8"><div class="flex items-center">
-                    <div id="step-customer" class="flex flex-col items-center"><div class="step-circle w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div><div class="step-label">អតិថិជន</div></div>
-                    <div id="connector-1" class="step-connector flex-1 h-1 bg-gray-700"></div>
-                    <div id="step-products" class="flex flex-col items-center"><div class="step-circle w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div><div class="step-label">ផលិតផល</div></div>
-                    <div id="connector-2" class="step-connector flex-1 h-1 bg-gray-700"></div>
-                    <div id="step-review" class="flex flex-col items-center"><div class="step-circle w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div><div class="step-label">ត្រួតពិនិត្យ</div></div>
-                    <div id="connector-3" class="step-connector flex-1 h-1 bg-gray-700"></div>
-                    <div id="step-shipping" class="flex flex-col items-center"><div class="step-circle w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div><div class="step-label">ដឹកជញ្ជូន</div></div>
-                    <div id="connector-4" class="step-connector flex-1 h-1 bg-gray-700"></div>
-                    <div id="step-final" class="flex flex-col items-center"><div class="step-circle w-8 h-8 rounded-full flex items-center justify-center font-bold">5</div><div class="step-label">ផ្ទៀងផ្ទាត់</div></div>
-                </div></div>
-                <!-- Page Selection -->
-                <div id="selectionPage" class="hidden w-full max-w-4xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold text-center mb-8 text-white">សូមជ្រើសរើស Page</h2><div id="page-selection-buttons" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"></div></div></div>
-                <!-- Customer Information Page -->
-                <div id="customerPage" class="hidden w-full max-w-2xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">១. ព័ត៌មានអតិថិជន</h2><div class="space-y-4">
-                    <input type="text" id="customer-name" placeholder="ឈ្មោះអតិថិជន" class="form-input w-full">
-                    <div class="relative">
-                        <input type="tel" id="customer-phone" placeholder="លេខទូរស័ព្ទ" class="form-input w-full pr-12">
-                        <img id="phone-carrier-logo" src="" alt="Carrier" class="hidden absolute right-2 top-1/2 -translate-y-1/2 h-8 w-auto object-contain">
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <select id="province" class="form-select w-full"></select>
-                        <select id="district" class="form-select w-full"></select>
-                        <select id="sangkat" class="form-select w-full"></select>
-                    </div>
-                    <div class="flex items-center"><input type="checkbox" id="add-location-details" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"><label for="add-location-details" class="ml-2 text-gray-300">បន្ថែមព័ត៌មានទីតាំងលម្អិត</label></div>
-                    <input type="text" id="additional-location" placeholder="ផ្ទះលេខ, ផ្លូវ,..." class="form-input w-full hidden">
-                    <div><label class="block text-sm font-medium text-gray-400 mb-2">ថ្លៃសេវាដឹកជញ្ជូន</label><div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0"><button id="shipping-fee-btn" class="btn btn-primary flex-1">គិតថ្លៃសេវា</button><button id="no-shipping-fee-btn" class="btn btn-secondary flex-1">មិនគិតថ្លៃសេវា</button></div><input type="number" id="shipping-fee-amount" placeholder="តម្លៃសេវាដឹក (ឧ. 1.5)" class="form-input w-full mt-3"></div>
-                </div><div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('selectionPage')">ត្រឡប់ក្រោយ</button><button class="btn btn-primary" onclick="validateAndGoToProducts()">បន្ទាប់</button></div></div></div>
-                <!-- Product Information Page -->
-                <div id="productsPage" class="hidden w-full max-w-2xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">២. ព័ត៌មានផលិតផល</h2><div id="product-form-container" class="space-y-6"></div><div class="flex flex-col sm:flex-row justify-between mt-8 space-y-2 sm:space-y-0"><button class="btn btn-secondary" onclick="goBack('customerPage')">ត្រឡប់ក្រោយ</button><div class="flex space-x-2 sm:space-x-4"><button id="add-another-product-btn" class="btn btn-secondary flex-1">រក្សាទុក & បន្ថែមថ្មី</button><button id="finish-adding-products-btn" class="btn btn-primary flex-1">រក្សាទុក & បញ្ចប់</button></div></div></div></div>
-                <!-- Order Review Page -->
-                <div id="reviewPage" class="hidden w-full max-w-3xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">៣. ត្រួតពិនិត្យផលិតផល</h2><div id="review-list" class="space-y-4"></div><div class="border-t border-gray-700 mt-6 pt-6 text-right space-y-2"><p class="text-lg">ចំនួនទំនិញសរុប: <span id="review-total-quantity" class="font-bold text-xl text-white">0</span></p><p class="text-lg">តម្លៃទំនិញសរុប (Subtotal): <span id="review-subtotal" class="font-bold text-xl text-blue-400">0.00$</span></p></div><div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('productsPage')">ត្រឡប់ក្រោយ</button><button class="btn btn-primary" onclick="goToShipping()">បន្ទាប់</button></div></div></div>
-                <!-- Internal Shipping Method Page -->
-                <div id="shippingPage" class="hidden w-full max-w-2xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">៤. វិធីសាស្រ្តដឹកជញ្ជូន</h2><div class="space-y-4">
-                    <div><label for="internal-shipping-method" class="block text-sm font-medium text-gray-400 mb-2">ជ្រើសរើសវិធីសាស្រ្តដឹកជញ្ជូន</label><select id="internal-shipping-method" class="form-select w-full"></select></div>
-                    <div id="shipping-details-container" class="mt-4"></div>
-                    <div class="space-y-2 mt-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">តម្លៃសេវាដឹក (ចំណាយ)</label>
-                            <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
-                                <button id="internal-cost-btn" class="btn btn-primary flex-1">គិតថ្លៃចំណាយ</button>
-                                <button id="no-internal-cost-btn" class="btn btn-secondary flex-1">មិនគិតថ្លៃ</button>
-                            </div>
-                            <input type="number" id="internal-shipping-cost" placeholder="0.00" class="form-input w-full mt-3">
-                        </div>
-                    </div>
-                </div><div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('reviewPage')">ត្រឡប់ក្រោយ</button><button class="btn btn-primary" onclick="goToFinalConfirmation()">បន្ទាប់</button></div></div></div>
-                <!-- Final Confirmation Page -->
-                <div id="finalConfirmationPage" class="hidden w-full max-w-3xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">៥. ផ្ទៀងផ្ទាត់ចុងក្រោយ</h2>
-                    <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ព័ត៌មានអតិថិជន</h3><div class="text-gray-300 space-y-1"><p><strong>ឈ្មោះ:</strong> <span id="final-customer-name"></span></p><p><strong>លេខទូរស័ព្ទ:</strong> <span id="final-customer-phone"></span></p><p><strong>ទីតាំង:</strong> <span id="final-customer-location"></span></p><p><strong>អាសយដ្ឋានលម្អិត:</strong> <span id="final-customer-address"></span></p></div></div>
-                    <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">បញ្ជីផលិតផល</h3><div id="final-products-list" class="space-y-4"></div></div>
-                    <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ព័ត៌មានដឹកជញ្ជូន</h3><div class="text-gray-300 space-y-1"><p><strong>ថ្លៃដឹក (គិតពីភ្ញៀវ):</strong> <span id="final-customer-shipping-fee" class="font-bold"></span></p><p><strong>វិធីដឹក:</strong> <span id="final-internal-method"></span></p><p><strong>អ្នកដឹក/Logo:</strong> <span id="final-internal-details"></span></p><p><strong>ចំណាយ:</strong> <span id="final-internal-cost"></span></p></div></div>
-                    
-                    <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ស្ថានភាពទូទាត់ប្រាក់</h3><div class="flex space-x-6"><label class="flex items-center"><input type="radio" name="payment-status" value="Unpaid" checked class="form-radio h-4 w-4 bg-gray-700 border-gray-600 text-blue-600"> <span class="ml-2">Unpaid</span></label><label class="flex items-center"><input type="radio" name="payment-status" value="Paid" class="form-radio h-4 w-4 bg-gray-700 border-gray-600 text-blue-600"> <span class="ml-2">Paid</span></label></div>
-                        <div id="payment-details-unpaid" class="mt-2 p-3 bg-red-900/50 border border-red-800 rounded-md text-red-300 font-semibold">ជាឥវ៉ាន់COD</div>
-                        <div id="payment-details-paid" class="hidden mt-2">
-                            <label for="bank-account-select" class="block text-sm font-medium text-gray-400 mb-2">ជ្រើសរើសគណនីធនាគារទទួល:</label>
-                            <div class="flex items-center space-x-4">
-                               <select id="bank-account-select" class="form-select flex-grow"></select>
-                               <img id="bank-logo-preview" src="" alt="Bank Logo" class="h-10 object-contain hidden bg-white p-1 rounded-md">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ចំណាំបន្ថែម</h3><textarea id="final-order-note" class="form-input w-full" rows="3" placeholder="បញ្ចូលចំណាំបន្ថែម (អាចរំលងបាន)..."></textarea></div>
-
-                    <div class="border-t border-gray-700 mt-6 pt-6 text-right"><p class="text-xl sm:text-2xl font-bold text-white">សរុបចុងក្រោយ (Grand Total)</p><p class="text-3xl sm:text-4xl font-extrabold text-blue-400" id="final-grand-total">0.00$</p></div>
-                    <div class="mt-8 border-t border-gray-700 pt-6"><h3 class="text-lg font-semibold mb-3 text-blue-400">ជម្រើស Telegram Bot</h3><div class="flex items-center"><input type="checkbox" id="schedule-telegram" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"><label for="schedule-telegram" class="ml-2 text-gray-300">កំណត់ពេលបញ្ជូនសារ</label></div><input type="datetime-local" id="telegram-schedule-time" class="form-input w-full md:w-1/2 mt-3 hidden"></div>
-                    <div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('shippingPage')">កែសម្រួល</button><button id="submit-order-btn" class="btn btn-primary flex items-center"><span id="submit-btn-text">បញ្ជូនទិន្នន័យ</span><div id="loading-spinner" class="hidden w-5 h-5 border-2 border-t-transparent rounded-full animate-spin ml-2"></div></button></div>
-                </div></div>
-                <!-- Submission Feedback -->
-                <div id="submit-feedback" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 opacity-0 transform scale-95"><div class="text-center text-white">
-                    <svg id="feedback-success-icon" class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <svg id="feedback-error-icon" class="hidden w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <p id="feedback-message" class="text-2xl font-bold"></p>
-                </div></div>
-            </div>
-            <!-- End Regular User App UI -->
+            <!-- Content will be injected here -->
         </div> 
-        <!-- End App Container -->
-    </div>
-    
-    <!-- Admin Modals (Shared) -->
-    <div id="user-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 modal">
-        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg border border-gray-700">
-            <div class="p-6 border-b border-gray-700 flex justify-between items-center">
-                <h3 id="user-modal-title" class="text-xl font-bold text-white">Add User</h3>
-                <button id="close-user-modal" class="text-gray-400 hover:text-white text-3xl leading-none">&times;</button>
-            </div>
-            <div class="p-6">
-                <form id="user-form" class="space-y-4">
-                    <input type="hidden" id="user-original-username">
-                    <div><label class="block text-sm mb-1 text-gray-400">Username</label><input type="text" id="user-form-username" class="form-input w-full" required></div>
-                    <div><label class="block text-sm mb-1 text-gray-400">Password (ទុកឲ្យនៅទំនេរ បើមិនប្តូរ)</label><input type="password" id="user-form-password" class="form-input w-full"></div>
-                    <div><label class="block text-sm mb-1 text-gray-400">Full Name</label><input type="text" id="user-form-fullname" class="form-input w-full" required></div>
-                    <div><label class="block text-sm mb-1 text-gray-400">Team</label><input type="text" id="user-form-team" class="form-input w-full"></div>
-                    <div><label class="block text-sm mb-1 text-gray-400">Role</label><input type="text" id="user-form-role" class="form-input w-full"></div>
-                    <div><label class="block text-sm mb-1 text-gray-400">Profile Picture URL</label><input type="text" id="user-form-profile" class="form-input w-full"></div>
-                    <div class="flex items-center"><input type="checkbox" id="user-form-isadmin" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-blue-600"><label for="user-form-isadmin" class="ml-2">Is System Admin</label></div>
-                </form>
-            </div>
-            <div class="p-4 bg-gray-900/50 flex justify-end space-x-4 rounded-b-lg">
-                <button id="cancel-user-save" class="btn btn-secondary">Cancel</button>
-                <button id="save-user-btn" class="btn btn-primary">Save User</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="confirm-delete-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 modal">
-        <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-md border border-gray-700">
-            <div class="p-6 text-center">
-                <svg class="w-16 h-16 text-red-500 mx-auto mb-4" data-lucide="alert-triangle"></svg>
-                <h3 class="text-xl font-bold text-white mb-2">Are you sure?</h3>
-                <p id="delete-modal-text" class="text-gray-400 mb-6">This process cannot be undone.</p>
-                <div class="flex justify-center space-x-4">
-                    <button id="cancel-delete-btn" class="btn btn-secondary">Cancel</button>
-                    <button id="confirm-delete-btn" class="btn btn-danger">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
+    </div>
 
     <!-- Edit Profile Modal -->
     <div id="edit-profile-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
@@ -329,10 +203,22 @@
                 <button id="close-profile-modal-btn" class="text-2xl text-gray-500 hover:text-white">&times;</button>
             </div>
             <form id="edit-profile-form" class="space-y-4">
-                <div><label class="block text-sm font-medium text-gray-400 mb-2">ឈ្មោះគណនី</label><input type="text" id="edit-username" class="form-input w-full bg-gray-800 cursor-not-allowed" readonly></div>
-                <div><label for="edit-fullname" class="block text-sm font-medium text-gray-400 mb-2">ឈ្មោះពេញ</label><input type="text" id="edit-fullname" class="form-input w-full" required></div>
-                <div><label for="edit-password" class="block text-sm font-medium text-gray-400 mb-2">ពាក្យសម្ងាត់ថ្មី (ទុកឲ្យនៅទំនេរ បើមិនប្តូរ)</label><input type="password" id="edit-password" class="form-input w-full"></div>
-                 <div><label for="edit-confirm-password" class="block text-sm font-medium text-gray-400 mb-2">បញ្ជាក់ពាក្យសម្ងាត់ថ្មី</label><input type="password" id="edit-confirm-password" class="form-input w-full"></div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">ឈ្មោះគណនី</label>
+                    <input type="text" id="edit-username" class="form-input w-full bg-gray-800 cursor-not-allowed" readonly>
+                </div>
+                <div>
+                    <label for="edit-fullname" class="block text-sm font-medium text-gray-400 mb-2">ឈ្មោះពេញ</label>
+                    <input type="text" id="edit-fullname" class="form-input w-full" required>
+                </div>
+                <div>
+                    <label for="edit-password" class="block text-sm font-medium text-gray-400 mb-2">ពាក្យសម្ងាត់ថ្មី (ទុកឲ្យនៅទំនេរ បើមិនប្តូរ)</label>
+                    <input type="password" id="edit-password" class="form-input w-full">
+                </div>
+                 <div>
+                    <label for="edit-confirm-password" class="block text-sm font-medium text-gray-400 mb-2">បញ្ជាក់ពាក្យសម្ងាត់ថ្មី</label>
+                    <input type="password" id="edit-confirm-password" class="form-input w-full">
+                </div>
                 <p id="profile-update-error" class="text-red-400 mt-2 h-5"></p>
                 <div class="flex justify-end pt-4">
                     <button type="button" id="cancel-edit-profile-btn" class="btn btn-secondary mr-4">បោះបង់</button>
@@ -361,7 +247,6 @@
     <datalist id="color-suggestions"></datalist>
     <datalist id="product-suggestions"></datalist>
 
-<!-- NOTE: config.js must be in the same external hosting folder as index.html -->
 <script src="config.js"></script>
 <script>
     // --- Global State ---
@@ -372,27 +257,14 @@
     let productFormCounter = 0;
     let html5QrCode = null;
     let currentScannerFormId = null;
-    
-    // --- Admin Panel Global State ---
-    let adminPanelState = {};
-    let activeSheetKey = 'products';
-    const sheetMap = { 
-        users: 'Users', products: 'Products', bankAccounts: 'BankAccounts', 
-        drivers: 'Drivers', shippingMethods: 'ShippingMethods', teamsPages: 'TeamsPages', 
-        telegramTemplates: 'TelegramTemplates', phoneCarriers: 'PhoneCarriers' 
-    };
 
     // --- DOM Elements ---
     const pages = {
         loginPage: document.getElementById('loginPage'),
         selectionPage: null, customerPage: null, productsPage: null, reviewPage: null, shippingPage: null, finalConfirmationPage: null
     };
-    // Re-assign pages later in buildAppUI
-
     const mainContainer = document.getElementById('main-container');
     const appContainer = document.getElementById('app-container');
-    const regularAppUI = document.getElementById('regular-app-ui');
-    const adminPanelUI = document.getElementById('admin-panel-ui');
     const loginForm = document.getElementById('login-form');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
@@ -420,57 +292,7 @@
     const closeProfileModalBtn = document.getElementById('close-profile-modal-btn');
     const cancelEditProfileBtn = document.getElementById('cancel-edit-profile-btn');
     const editProfileForm = document.getElementById('edit-profile-form');
-
-    // --- Core API Caller (Using fetch for external hosting) ---
-    /**
-     * Centralized function to call the Apps Script Backend API.
-     * @param {string} action - The action parameter to send to doGet/doPost.
-     * @param {Object} payload - The data payload for POST requests.
-     * @param {string} method - 'GET' or 'POST'.
-     * @returns {Promise<Object>} The parsed JSON response data.
-     */
-    async function callWebApp(action, payload = {}, method = 'POST') {
-        const isGet = method.toUpperCase() === 'GET';
-        const params = isGet ? `?action=${action}` : '';
-        const url = `${WEB_APP_URL}${params}`;
-        
-        let response;
-        const maxRetries = 3;
-        let attempt = 0;
-        
-        while (attempt < maxRetries) {
-            attempt++;
-            try {
-                if (isGet) {
-                    response = await fetch(url);
-                } else {
-                    response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action, payload })
-                    });
-                }
-                
-                if (!response.ok) throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
-                const result = await response.json();
-                
-                if (result.status === 'error' || result.status === 'locked') {
-                    // Treat application-level errors (like permission denied) as failure
-                    throw new Error(result.message || 'API responded with error status.');
-                }
-                return result.data || result; // Return data if successful
-                
-            } catch (error) {
-                if (attempt === maxRetries) {
-                    console.error(`API Call Failed after ${maxRetries} attempts for action ${action}:`, error);
-                    throw new Error(`Connection Error or Server Busy (${error.message}).`);
-                }
-                // Exponential backoff
-                await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 100));
-            }
-        }
-    }
-
+    
 
     // --- Event Listeners ---
     document.addEventListener('DOMContentLoaded', initialize);
@@ -509,7 +331,6 @@
 
     // --- Initialization & Session Management ---
     async function initialize() {
-        buildAppUI(); // Ensure all DOM elements are set up first
         await checkSession();
     }
 
@@ -547,21 +368,23 @@
         statusText.textContent = 'កំពុងពិនិត្យការតភ្ជាប់...';
         connectionStatus.className = 'text-sm rounded-lg p-3 mb-6 flex items-center justify-center space-x-2 bg-yellow-900 text-yellow-300';
 
-        if (typeof WEB_APP_URL === 'undefined' || WEB_APP_URL.includes("YOUR_DEPLOYED_WEB_APP_ID") || WEB_APP_URL.length < 50) {
+        if (typeof WEB_APP_URL === 'undefined' || WEB_APP_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") || WEB_APP_URL.length < 50) {
             setConnectionStatus(false, 'URL មិនទាន់បានកំណត់រចនាសម្ព័ន្ធ។ សូមពិនិត្យ Deployment របស់អ្នក។');
             return;
         }
 
         try {
-            const result = await callWebApp('ping', {}, 'GET'); // Call the ping endpoint
-            if (result.status === 'success' && result.message === 'pong') {
+            const response = await fetch(`${WEB_APP_URL}?action=ping`);
+            if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
+            const data = await response.json();
+            if (data.status === 'success' && data.message === 'pong') {
                 setConnectionStatus(true, 'ការតភ្ជាប់ជោគជ័យ');
             } else {
                 throw new Error('Invalid response from server.');
             }
         } catch (error) {
             console.error("Connection verification failed:", error);
-            setConnectionStatus(false, `URL មិនត្រឹមត្រូវ ឬមិនដំណើរការ (${error.message})។ សូមពិនិត្យ Deployment របស់អ្នក។`);
+            setConnectionStatus(false, 'URL មិនត្រឹមត្រូវ ឬមិនដំណើរការ។ សូមពិនិត្យ Deployment របស់អ្នក។');
         }
     }
 
@@ -584,18 +407,6 @@
     
     // --- Navigation ---
     function showPage(pageId) {
-        // Only show Admin or Regular App UI based on context
-        if (pageId === 'admin') {
-            regularAppUI.classList.add('hidden');
-            adminPanelUI.classList.remove('hidden');
-            currentPage = 'admin';
-            return;
-        }
-        
-        // Ensure regular user UI is visible
-        adminPanelUI.classList.add('hidden');
-        regularAppUI.classList.remove('hidden');
-
         Object.values(pages).forEach(page => {
             if(page) page.classList.add('hidden');
         });
@@ -673,27 +484,30 @@
             }
 
             if (needsFetching) {
-                const [staticData, usersData] = await Promise.all([
-                    callWebApp('getStaticData', {}, 'GET'),
-                    callWebApp('getUsers', {}, 'GET')
+                const [staticResponse, usersResponse] = await Promise.all([
+                    fetch(`${WEB_APP_URL}?action=getStaticData`),
+                    fetch(`${WEB_APP_URL}?action=getUsers`)
                 ]);
 
-                appData = { ...staticData, users: usersData };
+                if (!staticResponse.ok) throw new Error('Could not fetch static data.');
+                if (!usersResponse.ok) throw new Error('Could not fetch user data.');
+
+                const staticResult = await staticResponse.json();
+                const usersResult = await usersResponse.json();
+
+                if (staticResult.status !== 'success') throw new Error(staticResult.message);
+                if (usersResult.status !== 'success') throw new Error(usersResult.message);
+
+                appData = { ...staticResult.data, users: usersResult.data };
                 
                 localStorage.setItem(CACHE_KEY, JSON.stringify({ data: appData, timestamp: new Date().getTime() }));
             }
             
-            // Re-assign pages based on IDs in the merged HTML
-            Object.keys(pages).forEach(key => {
-                if(key !== 'loginPage') pages[key] = document.getElementById(key);
-            });
-            
-            // Initialize Regular User UI specific elements
+            buildAppUI();
             populateStaticDropdowns();
             setupPageSelection();
             updateProductSuggestions();
             updateColorSuggestions();
-            
             appContainer.classList.remove('hidden');
         } catch (error) {
             console.error("Data Fetching Error:", error);
@@ -704,27 +518,32 @@
         }
     }
     
-    // --- Admin Dashboard Logic (Merged from admin.html) ---
     async function loadAdminDashboard() {
         dataLoader.classList.remove('hidden');
         appContainer.classList.add('hidden');
-        
         try {
-            // Fetch all admin-specific data using callWebApp
-            const adminData = await callWebApp('getAllSheetDataForAdmin', {}, 'GET');
+            const [adminHtmlRes, adminDataRes] = await Promise.all([
+                fetch(`${WEB_APP_URL}?action=getAdminPage`),
+                fetch(`${WEB_APP_URL}?action=getAllSheetDataForAdmin`)
+            ]);
             
-            // Initialize Admin Panel UI
-            adminPanelState.currentData = adminData;
-            adminPanelState.currentUser = currentUser;
-            adminPanelState.activeSheetKey = 'products';
+            const adminHtml = await adminHtmlRes.text();
+            const adminDataResult = await adminDataRes.json();
             
-            initializeAdminPanelUI();
+            if (adminDataResult.status !== 'success') {
+                throw new Error(adminDataResult.message);
+            }
+            
+            appContainer.innerHTML = adminHtml;
+            
+            // The admin.html file has a function initializeAdminPanel, we call it here
+            if(window.initializeAdminPanel) {
+                initializeAdminPanel(adminDataResult.data, currentUser);
+            } else {
+                 throw new Error("Admin Panel script failed to load.");
+            }
+            
             updateProfileDisplay();
-            showPage('admin');
-            
-            // Show the default admin page
-            showAdminPage('dashboard');
-
             appContainer.classList.remove('hidden');
         } catch (error) {
             console.error("Failed to load admin dashboard:", error);
@@ -735,325 +554,114 @@
         }
     }
 
-    // Admin Panel UI Initialization
-    function initializeAdminPanelUI() {
-        const navLinks = { dashboard: document.getElementById('nav-dashboard'), users: document.getElementById('nav-users'), config: document.getElementById('nav-config'), reports: document.getElementById('nav-reports') };
-        const pages = { dashboard: document.getElementById('page-dashboard'), users: document.getElementById('page-users'), config: document.getElementById('page-config'), reports: document.getElementById('page-reports') };
-        
-        lucide.createIcons();
-        setupDashboard();
-        
-        // Navigation Setup
-        Object.entries(navLinks).forEach(([key, link]) => link.addEventListener('click', (e) => { e.preventDefault(); showAdminPage(key); }));
-        
-        // User Management Listeners
-        document.getElementById('add-user-btn').addEventListener('click', () => openUserModal('add'));
-        document.getElementById('close-user-modal').addEventListener('click', closeUserModal);
-        document.getElementById('cancel-user-save').addEventListener('click', closeUserModal);
-        document.getElementById('save-user-btn').addEventListener('click', saveUser);
-        document.getElementById('cancel-delete-btn').addEventListener('click', closeDeleteModal);
-
-        // Config Listeners
-        document.querySelectorAll('.config-tab-btn').forEach(btn => btn.addEventListener('click', handleConfigTabClick));
-        renderConfigTable(adminPanelState.activeSheetKey);
-
-        // Expose functions for buttons rendered in tables
-        window.adminPanel = { 
-            editUser: (username) => openUserModal('edit', username), 
-            deleteUser: deleteUser,
-        };
-    }
-
-    // Admin Navigation
-    function showAdminPage(pageKey) { 
-        const navLinks = { dashboard: document.getElementById('nav-dashboard'), users: document.getElementById('nav-users'), config: document.getElementById('nav-config'), reports: document.getElementById('nav-reports') };
-        const pages = { dashboard: document.getElementById('page-dashboard'), users: document.getElementById('page-users'), config: document.getElementById('page-config'), reports: document.getElementById('page-reports') };
-
-        Object.values(pages).forEach(p => p.classList.add('hidden')); 
-        Object.values(navLinks).forEach(l => l.classList.remove('active')); 
-        
-        pages[pageKey].classList.remove('hidden'); 
-        navLinks[pageKey].classList.add('active'); 
-
-        // Re-render config table if navigating back to config
-        if (pageKey === 'config') {
-             renderConfigTable(adminPanelState.activeSheetKey);
-        } else if (pageKey === 'users') {
-             renderUsersTable();
-        }
-    }
-
-
-    // --- Dashboard Logic ---
-    function setupDashboard() {
-        const data = adminPanelState.currentData;
-        document.getElementById('stat-total-users').textContent = data.users.length;
-        document.getElementById('stat-total-products').textContent = data.products.length;
-        document.getElementById('stat-total-banks').textContent = data.bankAccounts.length;
-        document.getElementById('stat-total-drivers').textContent = data.drivers.length;
-        
-        const chartCanvas = document.getElementById('overview-chart').getContext('2d');
-        if(window.overviewChart) window.overviewChart.destroy();
-
-        window.overviewChart = new Chart(chartCanvas, { 
-            type: 'bar', 
-            data: { 
-                labels: ['Users', 'Products', 'Banks', 'Drivers', 'Shipping', 'Pages'], 
-                datasets: [{ 
-                    label: 'Count', 
-                    data: [
-                        data.users.length, 
-                        data.products.length, 
-                        data.bankAccounts.length, 
-                        data.drivers.length, 
-                        data.shippingMethods.length, 
-                        data.teamsPages.length
-                    ], 
-                    backgroundColor: 'rgba(59, 130, 246, 0.5)', 
-                    borderColor: 'rgba(59, 130, 246, 1)', 
-                    borderWidth: 1 
-                }] 
-            }, 
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false,
-                scales: { 
-                    y: { 
-                        beginAtZero: true, 
-                        grid: { color: '#374151' },
-                        ticks: { color: '#9ca3af', stepSize: 1 }
-                    }, 
-                    x: { 
-                        grid: { color: '#374151' },
-                        ticks: { color: '#9ca3af' }
-                    } 
-                }, 
-                plugins: { legend: { display: false } } 
-            } 
-        });
-    }
-
-    // --- User Management Logic ---
-    function renderUsersTable() {
-        const data = adminPanelState.currentData;
-        const tbody = document.getElementById('users-table-body');
-        tbody.innerHTML = data.users.map(u => `
-            <tr class="hover:bg-gray-700/50">
-                <td class="table-cell font-medium text-white">${u.UserName}</td>
-                <td class="table-cell">${u.FullName}</td>
-                <td class="table-cell">${u.Team}</td>
-                <td class="table-cell">${u.Role}</td>
-                <td class="table-cell">${u.IsSystemAdmin ? '<span class="px-2 py-1 text-xs font-semibold text-green-300 bg-green-800 rounded-full">Yes</span>' : 'No'}</td>
-                <td class="table-cell flex space-x-2">
-                    <button class="text-blue-400 hover:text-blue-200" onclick="window.adminPanel.editUser('${u.UserName}')"><svg data-lucide="file-pen-line" class="w-4 h-4"></svg></button>
-                    <button class="text-red-400 hover:text-red-200" onclick="window.adminPanel.deleteUser('${u.UserName}')"><svg data-lucide="trash-2" class="w-4 h-4"></svg></button>
-                </td>
-            </tr>`).join('');
-        lucide.createIcons();
-    }
-
-    function openUserModal(mode, username = null) {
-        const userModal = document.getElementById('user-modal');
-        const data = adminPanelState.currentData;
-        const form = document.getElementById('user-form');
-        form.reset();
-        document.getElementById('user-form-username').disabled = (mode === 'edit');
-        document.getElementById('user-form-password').placeholder = (mode === 'edit' ? 'ទុកឲ្យនៅទំនេរ បើមិនប្តូរ' : 'ពាក្យសម្ងាត់');
-
-        if (mode === 'edit') {
-            const user = data.users.find(u => u.UserName === username);
-            if (!user) return;
-            document.getElementById('user-modal-title').textContent = 'Edit User';
-            document.getElementById('user-original-username').value = user.UserName;
-            document.getElementById('user-form-username').value = user.UserName;
-            document.getElementById('user-form-fullname').value = user.FullName || '';
-            document.getElementById('user-form-team').value = user.Team || '';
-            document.getElementById('user-form-role').value = user.Role || '';
-            document.getElementById('user-form-profile').value = user.ProfilePictureURL || '';
-            document.getElementById('user-form-isadmin').checked = user.IsSystemAdmin === true;
-        } else {
-            document.getElementById('user-modal-title').textContent = 'Add New User';
-            document.getElementById('user-original-username').value = '';
-        }
-        userModal.classList.remove('hidden');
-    }
-
-    function closeUserModal() { document.getElementById('user-modal').classList.add('hidden'); }
-    
-    async function saveUser() {
-        const originalUsername = document.getElementById('user-original-username').value;
-        const isEditing = !!originalUsername;
-        const currentData = adminPanelState.currentData;
-        
-        const userData = {
-            UserName: document.getElementById('user-form-username').value.trim(), 
-            Password: document.getElementById('user-form-password').value, 
-            FullName: document.getElementById('user-form-fullname').value.trim(),
-            Team: document.getElementById('user-form-team').value.trim(), 
-            Role: document.getElementById('user-form-role').value.trim(), 
-            ProfilePictureURL: document.getElementById('user-form-profile').value.trim(),
-            IsSystemAdmin: document.getElementById('user-form-isadmin').checked,
-        };
-        
-        if (!userData.UserName || !userData.FullName) {
-            alert("Username and Full Name are required.");
-            return;
-        }
-
-        let updatedUsers = JSON.parse(JSON.stringify(currentData.users));
-        
-        if (isEditing) {
-            const index = updatedUsers.findIndex(u => u.UserName === originalUsername);
-            if (index === -1) { alert("User not found."); return; }
-            
-            const oldUser = updatedUsers[index];
-            if (!userData.Password) userData.Password = oldUser.Password;
-            updatedUsers[index] = { ...oldUser, ...userData };
-        } else {
-            if (!userData.Password) { alert("Password required for new users."); return; }
-            if (updatedUsers.some(u => u.UserName === userData.UserName)) { alert("Username already exists."); return; }
-            updatedUsers.push({ ...userData, Password: userData.Password });
-        }
-        
-        const headers = Object.keys(currentData.users.length > 0 ? currentData.users[0] : userData);
-        const dataToSave = updatedUsers.map(user => 
-            headers.map(h => user[h] !== undefined ? user[h] : '')
-        );
-
-        await saveSheetData(sheetMap.users, dataToSave, true);
-        closeUserModal();
-    }
-    
-    async function deleteUser(username) {
-        openDeleteModal('user', async () => {
-            const currentData = adminPanelState.currentData;
-            let updatedUsers = currentData.users.filter(u => u.UserName !== username);
-            
-            const headers = Object.keys(currentData.users.length > 0 ? currentData.users[0] : {});
-            const dataToSave = updatedUsers.map(user => headers.map(h => user[h] !== undefined ? user[h] : ''));
-
-            await saveSheetData(sheetMap.users, dataToSave, true);
-            closeDeleteModal();
-        });
-    }
-    
-    function openDeleteModal(itemType, confirmCallback) { 
-        document.getElementById('delete-modal-text').textContent = `Do you really want to delete this ${itemType}? This action cannot be undone.`; 
-        document.getElementById('confirm-delete-btn').onclick = confirmCallback; 
-        document.getElementById('confirm-delete-modal').classList.remove('hidden'); 
-    }
-    function closeDeleteModal() { document.getElementById('confirm-delete-modal').classList.add('hidden'); }
-
-    // --- Configuration Logic ---
-    function handleConfigTabClick(e) { 
-        document.querySelectorAll('.config-tab-btn').forEach(btn => btn.classList.remove('active')); 
-        e.target.classList.add('active'); 
-        adminPanelState.activeSheetKey = e.target.dataset.sheet; 
-        renderConfigTable(adminPanelState.activeSheetKey); 
-    }
-
-    function renderConfigTable(sheetKey) {
-        const container = document.getElementById('config-table');
-        const sheetData = adminPanelState.currentData[sheetKey];
-        const headers = sheetData && sheetData.length > 0 ? Object.keys(sheetData[0]) : 
-            (sheetKey === 'products' ? ["ProductName", "Barcode", "Price", "ImageURL"] : 
-             sheetKey === 'bankAccounts' ? ["BankName", "LogoURL"] : 
-             sheetKey === 'drivers' ? ["DriverName", "ImageURL"] : 
-             sheetKey === 'shippingMethods' ? ["MethodName", "LogoURL", "AllowManualDriver", "RequireDriverSelection"] :
-             sheetKey === 'teamsPages' ? ["Team", "PageName", "TelegramValue"] : 
-             sheetKey === 'telegramTemplates' ? ["Team", "Part", "Template"] :
-             []);
-
-        if (headers.length === 0 && sheetData.length === 0) {
-             container.innerHTML = `<thead><tr><th class="table-header text-center py-4">No headers available. Add a row manually.</th></tr></thead><tbody></tbody>`;
-             return;
-        }
-
-        const headerRow = `<thead><tr>${headers.map(h => `<th class="table-header">${h}</th>`).join('')}<th></th></tr></thead>`;
-        
-        const bodyRows = sheetData.map(row => {
-            const cells = headers.map(h => {
-                let cellValue = row[h] !== undefined ? row[h] : '';
-                if (typeof cellValue === 'boolean') {
-                    cellValue = cellValue ? 'TRUE' : 'FALSE';
-                } else if (cellValue === null || cellValue === undefined) {
-                    cellValue = '';
-                }
-                return `<td class="table-cell" contenteditable="true">${cellValue}</td>`;
-            }).join('');
-            return `<tr>${cells}<td class="table-cell"><button class="text-red-500 hover:text-red-300 remove-config-row-btn">&times;</button></td></tr>`;
-        }).join('');
-
-        container.innerHTML = headerRow + `<tbody>${bodyRows}</tbody>`;
-
-        document.getElementById('add-config-row-btn').onclick = () => addConfigTableRow(headers); 
-        document.getElementById('save-config-btn').onclick = () => saveConfigTable(sheetKey, headers); 
-        document.querySelectorAll('.remove-config-row-btn').forEach(btn => btn.onclick = (e) => e.target.closest('tr').remove());
-    }
-    
-    function addConfigTableRow(headers) { 
-        const tbody = document.querySelector("#config-table tbody");
-        if (!tbody) { renderConfigTable(adminPanelState.activeSheetKey); return; }
-
-        const newRow = tbody.insertRow(); 
-        headers.forEach(() => { 
-            const cell = newRow.insertCell(); 
-            cell.className = 'table-cell'; 
-            cell.setAttribute('contenteditable', 'true'); 
-        }); 
-        const actionCell = newRow.insertCell(); 
-        actionCell.className = 'table-cell'; 
-        actionCell.innerHTML = '<button class="text-red-500 hover:text-red-300 remove-config-row-btn">&times;</button>'; 
-        actionCell.querySelector('button').onclick = (e) => e.target.closest('tr').remove(); 
-    }
-
-    async function saveConfigTable(sheetKey, headers) {
-        const sheetName = sheetMap[sheetKey];
-        const dataToSave = Array.from(document.querySelectorAll('#config-table tbody tr')).map(row => 
-            Array.from(row.querySelectorAll('td[contenteditable]')).map(cell => cell.innerText.trim())
-        );
-
-        await saveSheetData(sheetName, [headers, ...dataToSave]);
-    }
-
-    // --- Core Data Saver (Used by Admin Panel) ---
-    async function saveSheetData(sheetName, data, isUserSheet = false) {
-        try {
-            const payload = { 
-                sheetName: sheetName, 
-                data: data, 
-                currentUser: { UserName: currentUser.UserName, IsSystemAdmin: currentUser.IsSystemAdmin }
-            };
-            
-            const response = await callWebApp('adminUpdateSheet', payload);
-
-            if (response.status === 'success') {
-                alert(`${sheetName} has been updated successfully! Refreshing data...`);
+    function buildAppUI() {
+        appContainer.innerHTML = `
+            <!-- Progress Indicator -->
+            <div id="progress-indicator" class="hidden w-full max-w-3xl mx-auto mb-4 sm:mb-8"><div class="flex items-center">
+                <div id="step-customer" class="flex flex-col items-center"><div class="step-circle">1</div><div class="step-label">អតិថិជន</div></div>
+                <div id="connector-1" class="step-connector flex-1 h-1"></div>
+                <div id="step-products" class="flex flex-col items-center"><div class="step-circle">2</div><div class="step-label">ផលិតផល</div></div>
+                <div id="connector-2" class="step-connector flex-1 h-1"></div>
+                <div id="step-review" class="flex flex-col items-center"><div class="step-circle">3</div><div class="step-label">ត្រួតពិនិត្យ</div></div>
+                <div id="connector-3" class="step-connector flex-1 h-1"></div>
+                <div id="step-shipping" class="flex flex-col items-center"><div class="step-circle">4</div><div class="step-label">ដឹកជញ្ជូន</div></div>
+                <div id="connector-4" class="step-connector flex-1 h-1"></div>
+                <div id="step-final" class="flex flex-col items-center"><div class="step-circle">5</div><div class="step-label">ផ្ទៀងផ្ទាត់</div></div>
+            </div></div>
+            <!-- Page Selection -->
+            <div id="selectionPage" class="hidden w-full max-w-4xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold text-center mb-8 text-white">សូមជ្រើសរើស Page</h2><div id="page-selection-buttons" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"></div></div></div>
+            <!-- Customer Information Page -->
+            <div id="customerPage" class="hidden w-full max-w-2xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">១. ព័ត៌មានអតិថិជន</h2><div class="space-y-4">
+                <input type="text" id="customer-name" placeholder="ឈ្មោះអតិថិជន" class="form-input w-full">
+                <div class="relative">
+                    <input type="tel" id="customer-phone" placeholder="លេខទូរស័ព្ទ" class="form-input w-full pr-12">
+                    <img id="phone-carrier-logo" src="" alt="Carrier" class="hidden absolute right-2 top-1/2 -translate-y-1/2 h-8 w-auto object-contain">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <select id="province" class="form-select w-full"></select>
+                    <select id="district" class="form-select w-full"></select>
+                    <select id="sangkat" class="form-select w-full"></select>
+                </div>
+                <div class="flex items-center"><input type="checkbox" id="add-location-details" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"><label for="add-location-details" class="ml-2 text-gray-300">បន្ថែមព័ត៌មានទីតាំងលម្អិត</label></div>
+                <input type="text" id="additional-location" placeholder="ផ្ទះលេខ, ផ្លូវ,..." class="form-input w-full hidden">
+                <div><label class="block text-sm font-medium text-gray-400 mb-2">ថ្លៃសេវាដឹកជញ្ជូន</label><div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0"><button id="shipping-fee-btn" class="btn btn-primary flex-1">គិតថ្លៃសេវា</button><button id="no-shipping-fee-btn" class="btn btn-secondary flex-1">មិនគិតថ្លៃសេវា</button></div><input type="number" id="shipping-fee-amount" placeholder="តម្លៃសេវាដឹក (ឧ. 1.5)" class="form-input w-full mt-3"></div>
+            </div><div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('selectionPage')">ត្រឡប់ក្រោយ</button><button class="btn btn-primary" onclick="validateAndGoToProducts()">បន្ទាប់</button></div></div></div>
+            <!-- Product Information Page -->
+            <div id="productsPage" class="hidden w-full max-w-2xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">២. ព័ត៌មានផលិតផល</h2><div id="product-form-container" class="space-y-6"></div><div class="flex flex-col sm:flex-row justify-between mt-8 space-y-2 sm:space-y-0"><button class="btn btn-secondary" onclick="goBack('customerPage')">ត្រឡប់ក្រោយ</button><div class="flex space-x-2 sm:space-x-4"><button id="add-another-product-btn" class="btn btn-secondary flex-1">រក្សាទុក & បន្ថែមថ្មី</button><button id="finish-adding-products-btn" class="btn btn-primary flex-1">រក្សាទុក & បញ្ចប់</button></div></div></div></div>
+            <!-- Order Review Page -->
+            <div id="reviewPage" class="hidden w-full max-w-3xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">៣. ត្រួតពិនិត្យផលិតផល</h2><div id="review-list" class="space-y-4"></div><div class="border-t border-gray-700 mt-6 pt-6 text-right space-y-2"><p class="text-lg">ចំនួនទំនិញសរុប: <span id="review-total-quantity" class="font-bold text-xl text-white">0</span></p><p class="text-lg">តម្លៃទំនិញសរុប (Subtotal): <span id="review-subtotal" class="font-bold text-xl text-blue-400">0.00$</span></p></div><div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('productsPage')">ត្រឡប់ក្រោយ</button><button class="btn btn-primary" onclick="goToShipping()">បន្ទាប់</button></div></div></div>
+            <!-- Internal Shipping Method Page -->
+            <div id="shippingPage" class="hidden w-full max-w-2xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">៤. វិធីសាស្រ្តដឹកជញ្ជូន</h2><div class="space-y-4">
+                <div><label for="internal-shipping-method" class="block text-sm font-medium text-gray-400 mb-2">ជ្រើសរើសវិធីសាស្រ្តដឹកជញ្ជូន</label><select id="internal-shipping-method" class="form-select w-full"></select></div>
+                <div id="shipping-details-container" class="mt-4"></div>
+                <div class="space-y-2 mt-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">តម្លៃសេវាដឹក (ចំណាយ)</label>
+                        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+                            <button id="internal-cost-btn" class="btn btn-primary flex-1">គិតថ្លៃចំណាយ</button>
+                            <button id="no-internal-cost-btn" class="btn btn-secondary flex-1">មិនគិតថ្លៃ</button>
+                        </div>
+                        <input type="number" id="internal-shipping-cost" placeholder="0.00" class="form-input w-full mt-3">
+                    </div>
+                </div>
+            </div><div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('reviewPage')">ត្រឡប់ក្រោយ</button><button class="btn btn-primary" onclick="goToFinalConfirmation()">បន្ទាប់</button></div></div></div>
+            <!-- Final Confirmation Page -->
+            <div id="finalConfirmationPage" class="hidden w-full max-w-3xl mx-auto"><div class="page-card"><h2 class="text-2xl font-bold mb-6 text-white">៥. ផ្ទៀងផ្ទាត់ចុងក្រោយ</h2>
+                <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ព័ត៌មានអតិថិជន</h3><div class="text-gray-300 space-y-1"><p><strong>ឈ្មោះ:</strong> <span id="final-customer-name"></span></p><p><strong>លេខទូរស័ព្ទ:</strong> <span id="final-customer-phone"></span></p><p><strong>ទីតាំង:</strong> <span id="final-customer-location"></span></p><p><strong>អាសយដ្ឋានលម្អិត:</strong> <span id="final-customer-address"></span></p></div></div>
+                <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">បញ្ជីផលិតផល</h3><div id="final-products-list" class="space-y-4"></div></div>
+                <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ព័ត៌មានដឹកជញ្ជូន</h3><div class="text-gray-300 space-y-1"><p><strong>ថ្លៃដឹក (គិតពីភ្ញៀវ):</strong> <span id="final-customer-shipping-fee" class="font-bold"></span></p><p><strong>វិធីដឹក:</strong> <span id="final-internal-method"></span></p><p><strong>អ្នកដឹក/Logo:</strong> <span id="final-internal-details"></span></p><p><strong>ចំណាយ:</strong> <span id="final-internal-cost"></span></p></div></div>
                 
-                const adminDataResult = await callWebApp('getAllSheetDataForAdmin', {}, 'GET'); 
+                <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ស្ថានភាពទូទាត់ប្រាក់</h3><div class="flex space-x-6"><label class="flex items-center"><input type="radio" name="payment-status" value="Unpaid" checked class="form-radio h-4 w-4 bg-gray-700 border-gray-600 text-blue-600"> <span class="ml-2">Unpaid</span></label><label class="flex items-center"><input type="radio" name="payment-status" value="Paid" class="form-radio h-4 w-4 bg-gray-700 border-gray-600 text-blue-600"> <span class="ml-2">Paid</span></label></div>
+                    <div id="payment-details-unpaid" class="mt-2 p-3 bg-red-900/50 border border-red-800 rounded-md text-red-300 font-semibold">ជាឥវ៉ាន់COD</div>
+                    <div id="payment-details-paid" class="hidden mt-2">
+                        <label for="bank-account-select" class="block text-sm font-medium text-gray-400 mb-2">ជ្រើសរើសគណនីធនាគារទទួល:</label>
+                        <div class="flex items-center space-x-4">
+                           <select id="bank-account-select" class="form-select flex-grow"></select>
+                           <img id="bank-logo-preview" src="" alt="Bank Logo" class="h-10 object-contain hidden bg-white p-1 rounded-md">
+                        </div>
+                    </div>
+                </div>
                 
-                if (adminDataResult.status === 'success') {
-                    adminPanelState.currentData = adminDataResult.data;
-                    setupDashboard();
+                <div class="mb-6"><h3 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-3 text-blue-400">ចំណាំបន្ថែម</h3><textarea id="final-order-note" class="form-input w-full" rows="3" placeholder="បញ្ចូលចំណាំបន្ថែម (អាចរំលងបាន)..."></textarea></div>
 
-                    if (isUserSheet) { 
-                        renderUsersTable(); 
-                    } else { 
-                        renderConfigTable(adminPanelState.activeSheetKey); 
-                    }
-                } else {
-                    throw new Error(adminDataResult.message || 'Failed to re-fetch data.');
-                }
-            } else {
-                throw new Error(response.message || 'Unknown error.');
+                <div class="border-t border-gray-700 mt-6 pt-6 text-right"><p class="text-xl sm:text-2xl font-bold text-white">សរុបចុងក្រោយ (Grand Total)</p><p class="text-3xl sm:text-4xl font-extrabold text-blue-400" id="final-grand-total">0.00$</p></div>
+                <div class="mt-8 border-t border-gray-700 pt-6"><h3 class="text-lg font-semibold mb-3 text-blue-400">ជម្រើស Telegram Bot</h3><div class="flex items-center"><input type="checkbox" id="schedule-telegram" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"><label for="schedule-telegram" class="ml-2 text-gray-300">កំណត់ពេលបញ្ជូនសារ</label></div><input type="datetime-local" id="telegram-schedule-time" class="form-input w-full md:w-1/2 mt-3 hidden"></div>
+                <div class="flex justify-between mt-8"><button class="btn btn-secondary" onclick="goBack('shippingPage')">កែសម្រួល</button><button id="submit-order-btn" class="btn btn-primary flex items-center"><span id="submit-btn-text">បញ្ជូនទិន្នន័យ</span><div id="loading-spinner" class="hidden w-5 h-5 border-2 border-t-transparent rounded-full animate-spin ml-2"></div></button></div>
+            </div></div>
+            <!-- Submission Feedback -->
+            <div id="submit-feedback" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 opacity-0 transform scale-95"><div class="text-center text-white">
+                <svg id="feedback-success-icon" class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg id="feedback-error-icon" class="hidden w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p id="feedback-message" class="text-2xl font-bold"></p>
+            </div></div>
+        `;
+        
+        // Re-assign page elements
+        Object.keys(pages).forEach(key => {
+            if(key !== 'loginPage') pages[key] = document.getElementById(key);
+        });
+        
+        // Re-assign other dynamic elements and attach listeners
+        document.getElementById('add-location-details').addEventListener('change', (e) => document.getElementById('additional-location').classList.toggle('hidden', !e.target.checked));
+        document.getElementById('shipping-fee-btn').addEventListener('click', () => setShippingFeeMode(true));
+        document.getElementById('no-shipping-fee-btn').addEventListener('click', () => setShippingFeeMode(false));
+        document.getElementById('customer-phone').addEventListener('input', handlePhoneInput); // Add phone input listener
+        document.getElementById('add-another-product-btn').addEventListener('click', () => addProduct(true));
+        document.getElementById('finish-adding-products-btn').addEventListener('click', goToReview);
+        document.getElementById('internal-shipping-method').addEventListener('change', renderShippingDetails);
+        document.getElementById('internal-cost-btn').addEventListener('click', () => setInternalCostMode(true));
+        document.getElementById('no-internal-cost-btn').addEventListener('click', () => setInternalCostMode(false));
+        document.querySelectorAll('input[name="payment-status"]').forEach(radio => radio.addEventListener('change', handlePaymentStatusChange));
+        document.getElementById('schedule-telegram').addEventListener('change', (e) => {
+            const timeInput = document.getElementById('telegram-schedule-time');
+            timeInput.classList.toggle('hidden', !e.target.checked);
+            if (!e.target.checked) {
+              timeInput.value = '';
             }
-        } catch (error) { 
-            alert(`Error saving ${sheetName}: ${error.message}`); 
-            console.error(`Error saving ${sheetName}:`, error);
-        }
+        });
+        document.getElementById('submit-order-btn').addEventListener('click', handleSubmitOrder);
     }
-
-
+    
     // --- Login/Logout & Password Toggle ---
     async function handleLogin(e) {
         e.preventDefault();
@@ -1062,6 +670,7 @@
         const loginBtnText = document.getElementById('login-btn-text');
         const loginSpinner = document.getElementById('login-spinner');
 
+        // --- Start Loading State ---
         loginButton.disabled = true;
         loginSpinner.classList.remove('hidden');
         loginBtnText.textContent = 'កំពុងដំណើរការ...';
@@ -1070,12 +679,18 @@
         const password = passwordInput.value;
 
         try {
-            const result = await callWebApp('getUsers', {}, 'GET');
-            const user = result.find(u => u.UserName === username && u.Password == password);
+            const response = await fetch(`${WEB_APP_URL}?action=getUsers`);
+            if (!response.ok) throw new Error('Cannot connect to the server.');
+            const result = await response.json();
+            if (result.status !== 'success') throw new Error(result.message);
+            const user = result.data.find(u => u.UserName === username && u.Password == password);
 
             if (user) {
                 currentUser = user; 
-                const sessionData = { user: currentUser, timestamp: new Date().getTime() };
+                const sessionData = {
+                    user: currentUser,
+                    timestamp: new Date().getTime() 
+                };
                 localStorage.setItem('orderAppSession', JSON.stringify(sessionData));
                 pages.loginPage.classList.add('hidden');
                 mainContainer.classList.remove('items-center'); 
@@ -1093,6 +708,7 @@
         } catch(error) {
             loginError.textContent = 'Login failed: ' + error.message;
         } finally {
+            // --- End Loading State ---
             loginButton.disabled = false;
             loginSpinner.classList.add('hidden');
             loginBtnText.textContent = 'ចូលប្រើ';
@@ -1121,6 +737,7 @@
         localStorage.removeItem('orderAppSession');
         localStorage.removeItem('appDataCache'); 
         currentUser = null;
+        appContainer.innerHTML = ''; // Clear the app container
         appContainer.classList.add('hidden');
         appHeader.classList.add('hidden');
         pages.loginPage.classList.remove('hidden');
@@ -1131,10 +748,6 @@
         } else {
             loginError.textContent = '';
         }
-        
-        // Hide Admin UI on logout
-        adminPanelUI.classList.add('hidden');
-        regularAppUI.classList.remove('hidden');
     }
 
     // --- Profile Modal Logic ---
@@ -1149,7 +762,9 @@
         editProfileModal.classList.remove('hidden');
     }
 
-    function closeEditProfileModal() { editProfileModal.classList.add('hidden'); }
+    function closeEditProfileModal() {
+        editProfileModal.classList.add('hidden');
+    }
 
     async function handleProfileUpdateSubmit(e) {
         e.preventDefault();
@@ -1159,10 +774,18 @@
         const confirmPassword = document.getElementById('edit-confirm-password').value;
         const newFullName = document.getElementById('edit-fullname').value.trim();
 
-        if (!newFullName) { errorP.textContent = 'សូមបំពេញឈ្មោះពេញ។'; return; }
-        if (newPassword !== confirmPassword) { errorP.textContent = 'ពាក្យសម្ងាត់ថ្មីមិនត្រូវគ្នាទេ។'; return; }
+        if (!newFullName) {
+            errorP.textContent = 'សូមបំពេញឈ្មោះពេញ។';
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            errorP.textContent = 'ពាក្យសម្ងាត់ថ្មីមិនត្រូវគ្នាទេ។';
+            return;
+        }
 
         const payload = {
+            action: 'updateUserProfile',
             username: currentUser.UserName,
             fullName: newFullName,
             newPassword: newPassword 
@@ -1173,19 +796,34 @@
         saveBtn.textContent = 'កំពុងរក្សាទុក...';
 
         try {
-            const result = await callWebApp('updateUserProfile', payload);
+            await new Promise((resolve, reject) => {
+                google.script.run
+                    .withSuccessHandler(response => resolve(response))
+                    .withFailureHandler(error => reject(error))
+                    .doPost({ postData: { contents: JSON.stringify(payload) } });
+            });
             
-            // Update local state
-            currentUser = result.updatedUser;
-            const sessionData = { user: currentUser, timestamp: new Date().getTime() };
-            localStorage.setItem('orderAppSession', JSON.stringify(sessionData));
-            updateProfileDisplay();
-            closeEditProfileModal();
-            alert('Profile បានកែសម្រួលដោយជោគជ័យ។');
+            // Refetch all users to update local data
+            const usersResult = await new Promise((resolve, reject) => {
+                google.script.run
+                    .withSuccessHandler(response => resolve(response))
+                    .withFailureHandler(error => reject(error))
+                    .getUsers();
+            });
 
+            if (usersResult.status === 'success') {
+                appData.users = usersResult.data;
+                 currentUser = appData.users.find(u => u.UserName === currentUser.UserName);
+                const sessionData = { user: currentUser, timestamp: new Date().getTime() };
+                localStorage.setItem('orderAppSession', JSON.stringify(sessionData));
+                updateProfileDisplay();
+                closeEditProfileModal();
+                alert('Profile បានកែសម្រួលដោយជោគជ័យ។');
+            } else {
+                 throw new Error("Could not refresh user data.");
+            }
             if (newPassword) {
                 alert('អ្នកបានផ្លាស់ប្តូរពាក្យសម្ងាត់, សូម Log Out ហើយ Log In ចូលម្តងទៀត។');
-                logout();
             }
 
         } catch (error) {
@@ -1248,25 +886,19 @@
         const provinces = [...new Set(appData.locations.map(item => item.Province))].sort();
         provinceSelect.innerHTML = '<option value="">-- ជ្រើសរើស ខេត្ត/រាជធានី --</option>' + provinces.map(p => `<option value="${p}">${p}</option>`).join('');
         
-        provinceSelect.removeEventListener('change', updateLocationDropdowns);
-        districtSelect.removeEventListener('change', updateLocationDropdowns);
-
-        provinceSelect.addEventListener('change', updateLocationDropdowns);
-        districtSelect.addEventListener('change', updateLocationDropdowns);
+        provinceSelect.addEventListener('change', () => {
+            const selectedProvince = provinceSelect.value;
+            const districts = [...new Set(appData.locations.filter(l => l.Province === selectedProvince).map(l => l.District))].sort();
+            districtSelect.innerHTML = '<option value="">-- ជ្រើសរើស ស្រុក/ខណ្ឌ --</option>' + districts.map(d => `<option value="${d}">${d}</option>`).join('');
+            sangkatSelect.innerHTML = '<option value="">-- ជ្រើសរើស ឃុំ/សង្កាត់ --</option>'; // Reset sangkat
+        });
         
-        function updateLocationDropdowns(e) {
-             const selectedProvince = provinceSelect.value;
-             const selectedDistrict = districtSelect.value;
-
-             if (e.target.id === 'province') {
-                const districts = [...new Set(appData.locations.filter(l => l.Province === selectedProvince).map(l => l.District))].sort();
-                districtSelect.innerHTML = '<option value="">-- ជ្រើសរើស ស្រុក/ខណ្ឌ --</option>' + districts.map(d => `<option value="${d}">${d}</option>`).join('');
-                sangkatSelect.innerHTML = '<option value="">-- ជ្រើសរើស ឃុំ/សង្កាត់ (អាចរំលងបាន) --</option>';
-             } else if (e.target.id === 'district') {
-                const sangkats = [...new Set(appData.locations.filter(l => l.Province === selectedProvince && l.District === selectedDistrict && l.Sangkat).map(l => l.Sangkat))].sort();
-                sangkatSelect.innerHTML = '<option value="">-- ជ្រើសរើស ឃុំ/សង្កាត់ (អាចរំលងបាន) --</option>' + sangkats.map(s => `<option value="${s}">${s}</option>`).join('');
-             }
-        }
+        districtSelect.addEventListener('change', () => {
+            const selectedProvince = provinceSelect.value;
+            const selectedDistrict = districtSelect.value;
+            const sangkats = [...new Set(appData.locations.filter(l => l.Province === selectedProvince && l.District === selectedDistrict && l.Sangkat).map(l => l.Sangkat))].sort();
+            sangkatSelect.innerHTML = '<option value="">-- ជ្រើសរើស ឃុំ/សង្កាត់ (អាចរំលងបាន) --</option>' + sangkats.map(s => `<option value="${s}">${s}</option>`).join('');
+        });
 
         internalShippingMethodSelect.innerHTML = '<option value="">-- ជ្រើសរើស --</option>' + appData.shippingMethods.map(s => `<option value="${s.MethodName}">${s.MethodName}</option>`).join('');
         bankAccountSelect.innerHTML = '<option value="">-- ជ្រើសរើសគណនី --</option>' + (appData.bankAccounts || []).map(b => `<option value="${b.BankName}">${b.BankName}</option>`).join('');
@@ -1274,6 +906,7 @@
         bankAccountSelect.addEventListener('change', e => {
             const selectedBankName = e.target.value;
             const bankLogoPreview = document.getElementById('bank-logo-preview');
+            if (!bankLogoPreview) return;
 
             if (selectedBankName) {
                 const bank = appData.bankAccounts.find(b => b.BankName === selectedBankName);
@@ -1301,7 +934,7 @@
         pageSelectionButtons.querySelectorAll('.selection-button').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 order.page = e.target.dataset.page;
-                order.telegramValue = e.target.dataset.telegram-value;
+                order.telegramValue = e.target.dataset.telegramValue;
                 showPage('customerPage');
             });
         });
@@ -1485,16 +1118,10 @@
     function startBarcodeScanner(formId) {
         currentScannerFormId = formId;
         scannerContainer.classList.remove('hidden');
-        if (!html5QrCode) {
-             html5QrCode = new Html5Qrcode("reader");
-        }
-        
+        html5QrCode = new Html5Qrcode("reader");
         const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-        // Check if scanning is already running to avoid errors
-        if (!html5QrCode.isScanning) {
-            html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
-                .catch(err => console.error("Unable to start scanning.", err));
-        }
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
+            .catch(err => console.error("Unable to start scanning.", err));
     }
 
     function stopBarcodeScanner() {
@@ -1515,11 +1142,10 @@
             nameInput.value = product.ProductName;
             nameInput.dispatchEvent(new Event('input', { bubbles: true })); 
         } else {
-            // Use alert alternative
-             showFeedback(false, `រកមិនឃើញផលិតផលដែលមានបាកូដ: ${decodedText}`);
+            alert(`រកមិនឃើញផលិតផលដែលមានបាកូដ: ${decodedText}`);
         }
     }
-    
+
     // --- Product Form Management & Navigation ---
     function removeProduct(event, id) {
         event.preventDefault(); 
@@ -1544,8 +1170,7 @@
         const discountPercent = parseFloat(form.querySelector(`#discount-percent-${formId}`).value) || 0;
 
         if (isFinalizing && (!name || isNaN(quantity) || quantity <= 0 || isNaN(price) || price < 0)) {
-            // Use alert alternative
-            showFeedback(false, `ទិន្នន័យផលិតផលមិនត្រឹមត្រូវ។ សូមបំពេញឈ្មោះ, ចំនួន, និងតម្លៃ។`);
+            alert(`ទិន្នន័យផលិតផលមិនត្រឹមត្រូវ។ សូមបំពេញឈ្មោះ, ចំនួន, និងតម្លៃ។`);
             return false;
         }
         
@@ -1581,8 +1206,7 @@
         order.products = order.products.filter(p => p.name && p.name.trim() !== '');
 
         if (order.products.length === 0) {
-            // Use alert alternative
-            showFeedback(false, 'សូមបញ្ចូលផលិតផលយ៉ាងហោចណាស់មួយ។');
+            alert('សូមបញ្ចូលផលិតផលយ៉ាងហោចណាស់មួយ។');
             return;
         }
         
@@ -1637,7 +1261,7 @@
             container.innerHTML = `<label class="block text-sm font-medium text-gray-400 mb-2">ជ្រើសរើសអ្នកដឹក *</label><div class="grid grid-cols-2 md:grid-cols-3 gap-4">${drivers.map(driver => `
                 <label class="flex flex-col items-center p-3 bg-gray-800 rounded-lg border-2 border-transparent cursor-pointer hover:border-blue-500">
                     <input type="radio" name="${radioGroupName}" value="${driver.DriverName}" class="hidden">
-                    <img src="${convertGoogleDriveUrl(driver.ImageURL)}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1f2937/4b5563?text=Driver'" class="w-20 h-20 rounded-full object-cover mb-2">
+                    <img src="${convertGoogleDriveUrl(driver.ImageURL)}" class="w-20 h-20 rounded-full object-cover mb-2">
                     <span class="text-sm font-medium text-center">${driver.DriverName}</span>
                 </label>
             `).join('')}</div>`;
@@ -1702,7 +1326,6 @@
                     <p class="text-sm text-gray-300">ចំនួន: ${p.quantity}</p>
                     <p class="font-bold text-xl text-blue-400 mt-1">${p.total.toFixed(2)}$</p>
                     <div class="mt-2">
-                        <!-- Use custom function that simulates button click but uses showPage for navigation -->
                         <button class="text-xs text-yellow-400 hover:underline" onclick="editProduct(${p.id})">កែ</button>
                         <button class="text-xs text-red-400 hover:underline ml-2" onclick="deleteProductFromReview(${p.id})">លុប</button>
                     </div>
@@ -1720,8 +1343,7 @@
     }
     function editProduct(id) { showPage('productsPage'); }
     function deleteProductFromReview(id) {
-        // Simple confirmation logic without window.confirm()
-        if (confirmAction('តើអ្នកពិតជាចង់លុបផលិតផលនេះមែនទេ?')) {
+        if (confirm('តើអ្នកពិតជាចង់លុបផលិតផលនេះមែនទេ?')) {
             order.products = order.products.filter(p => p.id !== id);
             const formToRemove = document.getElementById(`product-form-${id}`);
             if (formToRemove) formToRemove.remove();
@@ -1729,18 +1351,9 @@
             renderReviewPage();
         }
     }
-    
-    function confirmAction(message) {
-        // Implement a custom modal for confirmation if needed, but for simplicity, 
-        // we use a simple message here as a placeholder for the forbidden window.confirm().
-        // For production, this should be a custom UI modal.
-        return confirm(message); // Retaining confirm() for now to avoid complexity of a new modal UI, but noting it should be replaced.
-    }
-
     function goToShipping() {
         if (order.products.length === 0) {
-            // Use alert alternative
-            showFeedback(false, 'សូមបន្ថែមផលិតផលមុននឹងបន្ត។');
+            alert('សូមបន្ថែមផលិតផលមុននឹងបន្ត។');
             showPage('productsPage');
             return;
         }
@@ -1750,8 +1363,7 @@
         order.shipping.method = document.getElementById('internal-shipping-method').value;
 
         if (!order.shipping.method) {
-            // Use alert alternative
-            showFeedback(false, 'សូមជ្រើសរើសវិធីសាស្រ្តដឹកជញ្ជូនជាមុនសិន។');
+            alert('សូមជ្រើសរើសវិធីសាស្រ្តដឹកជញ្ជូនជាមុនសិន។');
             return;
         }
 
@@ -1760,8 +1372,7 @@
         if (method && method.RequireDriverSelection) {
             const selectedDriver = document.querySelector('#shipping-details-container input[name="driver-selection"]:checked');
              if (!selectedDriver) {
-                // Use alert alternative
-                showFeedback(false, 'វិធីសាស្ត្រដឹកជញ្ជូននេះ តម្រូវឲ្យជ្រើសរើសអ្នកដឹក។');
+                alert('វិធីសាស្ត្រដឹកជញ្ជូននេះ តម្រូវឲ្យជ្រើសរើសអ្នកដឹក។');
                 return;
              }
              order.shipping.details = selectedDriver.value;
@@ -1770,8 +1381,7 @@
             if (manualDriverCheckbox && manualDriverCheckbox.checked) {
                  const selectedManualDriver = document.querySelector('#manual-driver-selection-container input[name="manual-driver-selection"]:checked');
                  if (!selectedManualDriver) {
-                    // Use alert alternative
-                    showFeedback(false, 'សូមជ្រើសរើសអ្នកដឹកជញ្ជូន។');
+                    alert('សូមជ្រើសរើសអ្នកដឹកជញ្ជូន។');
                     return;
                  }
                  order.shipping.details = selectedManualDriver.value;
@@ -1781,8 +1391,7 @@
         const costInput = document.getElementById('internal-shipping-cost');
         const isCostEnabled = !costInput.classList.contains('hidden');
         if (isCostEnabled && costInput.value.trim() === '') {
-            // Use alert alternative
-            showFeedback(false, 'សូមបញ្ចូលតម្លៃសេវាដឹក (ចំណាយ) ឬចុច "មិនគិតថ្លៃ"។');
+            alert('សូមបញ្ចូលតម្លៃសេវាដឹក (ចំណាយ) ឬចុច "មិនគិតថ្លៃ"។');
             return;
         }
 
@@ -1823,16 +1432,14 @@
         const paymentStatus = document.querySelector('input[name="payment-status"]:checked').value;
         const bankAccount = document.getElementById('bank-account-select').value;
         if (paymentStatus === 'Paid' && !bankAccount) {
-            // Use alert alternative
-            showFeedback(false, 'សូមជ្រើសរើសគណនីធនាគារទទួលជាមុនសិន។');
+            alert('សូមជ្រើសរើសគណនីធនាគារទទួលជាមុនសិន។');
             return; 
         }
 
         const isScheduled = document.getElementById('schedule-telegram').checked;
         const scheduleTimeInput = document.getElementById('telegram-schedule-time');
         if(isScheduled && !scheduleTimeInput.value){
-            // Use alert alternative
-            showFeedback(false, 'សូមជ្រើសរើសថ្ងៃខែនិងពេលវេលាសម្រាប់កំណត់ពេលបញ្ជូនសារ។');
+            alert('សូមជ្រើសរើសថ្ងៃខែនិងពេលវេលាសម្រាប់កំណត់ពេលបញ្ជូនសារ។');
             return;
         }
 
@@ -1855,6 +1462,7 @@
         order.note = document.getElementById('final-order-note').value.trim();
         
         const orderData = { 
+            action: 'submitOrder',
             currentUser, 
             page: order.page,
             telegramValue: order.telegramValue,
@@ -1869,7 +1477,12 @@
         };
 
         try {
-             await callWebApp('submitOrder', orderData);
+             await new Promise((resolve, reject) => {
+                google.script.run
+                    .withSuccessHandler(response => resolve(response))
+                    .withFailureHandler(error => reject(error))
+                    .doPost({ postData: { contents: JSON.stringify(orderData) } });
+            });
             showFeedback(true, 'ការកម្ម៉ង់ត្រូវបានបញ្ជូនដោយជោគជ័យ!');
         } catch (error) {
             console.error('Submission Error:', error);
@@ -1881,31 +1494,14 @@
             setTimeout(resetApp, 3000);
         }
     }
-
-    // Custom alert/message box function
     function showFeedback(isSuccess, message) {
         const feedbackEl = document.getElementById('submit-feedback');
-        const successIcon = document.getElementById('feedback-success-icon');
-        const errorIcon = document.getElementById('feedback-error-icon');
-        const messageEl = document.getElementById('feedback-message');
-        
-        successIcon.classList.toggle('hidden', !isSuccess);
-        errorIcon.classList.toggle('hidden', isSuccess);
-        messageEl.textContent = message;
-        
+        document.getElementById('feedback-success-icon').classList.toggle('hidden', !isSuccess);
+        document.getElementById('feedback-error-icon').classList.toggle('hidden', isSuccess);
+        document.getElementById('feedback-message').textContent = message;
         feedbackEl.classList.remove('hidden');
         setTimeout(() => feedbackEl.classList.add('opacity-100', 'scale-100'), 10);
-        
-        // Auto-hide after 5 seconds if not a permanent error
-        if (isSuccess || message.includes('Success')) {
-             setTimeout(() => {
-                feedbackEl.classList.remove('opacity-100', 'scale-100');
-                setTimeout(() => feedbackEl.classList.add('hidden'), 500);
-             }, 5000);
-        }
     }
-
-
     function resetApp() {
         const feedbackEl = document.getElementById('submit-feedback');
         feedbackEl.classList.remove('opacity-100', 'scale-100');
@@ -1936,8 +1532,6 @@
 
         showPage('selectionPage');
     }
-    
-    // --- Utility Functions ---
     function convertGoogleDriveUrl(url) {
         if (!url || typeof url !== 'string') return 'https://placehold.co/100x100/1f2937/4b5563?text=IMG';
         if (!url.includes('drive.google.com')) return url; 
@@ -1977,44 +1571,6 @@
             imagePreviewModal.classList.add('hidden');
             previewImage.src = '';
         }, 300);
-    }
-
-    // Initial setup of regular app UI pages
-    function buildAppUI() {
-        // Find and assign all regular user pages
-        pages.selectionPage = document.getElementById('selectionPage');
-        pages.customerPage = document.getElementById('customerPage');
-        pages.productsPage = document.getElementById('productsPage');
-        pages.reviewPage = document.getElementById('reviewPage');
-        pages.shippingPage = document.getElementById('shippingPage');
-        pages.finalConfirmationPage = document.getElementById('finalConfirmationPage');
-
-        // Initial setup for the first product form
-        if (document.getElementById('product-form-container') && productFormCounter === 0) {
-            addProduct(false); // Add one initial product form
-        }
-
-        // Setup mandatory listeners for regular UI
-        document.getElementById('add-location-details').addEventListener('change', (e) => document.getElementById('additional-location').classList.toggle('hidden', !e.target.checked));
-        document.getElementById('shipping-fee-btn').addEventListener('click', () => setShippingFeeMode(true));
-        document.getElementById('no-shipping-fee-btn').addEventListener('click', () => setShippingFeeMode(false));
-        document.getElementById('customer-phone').addEventListener('input', handlePhoneInput); 
-        document.getElementById('add-another-product-btn').addEventListener('click', () => addProduct(true));
-        document.getElementById('finish-adding-products-btn').addEventListener('click', goToReview);
-        document.getElementById('internal-shipping-method').addEventListener('change', renderShippingDetails);
-        document.getElementById('internal-cost-btn').addEventListener('click', () => setInternalCostMode(true));
-        document.getElementById('no-internal-cost-btn').addEventListener('click', () => setInternalCostMode(false));
-        document.querySelectorAll('input[name="payment-status"]').forEach(radio => radio.addEventListener('change', handlePaymentStatusChange));
-        document.getElementById('schedule-telegram').addEventListener('change', (e) => {
-            const timeInput = document.getElementById('telegram-schedule-time');
-            timeInput.classList.toggle('hidden', !e.target.checked);
-            if (!e.target.checked) { timeInput.value = ''; }
-        });
-        document.getElementById('submit-order-btn').addEventListener('click', handleSubmitOrder);
-        
-        // Initial button setup
-        setShippingFeeMode(true);
-        setInternalCostMode(true);
     }
 </script>
 </body>
